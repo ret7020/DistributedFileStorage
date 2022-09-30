@@ -12,16 +12,20 @@ class WebApi:
         def __index():
             return self.index()
 
-        @self.app.route('/api/upload_file')
+        @self.app.route('/api/upload_file', method=['POST'])
         def __upload_file():
-            return self.index()
+            return self.upload_file()
 
         @self.app.route('/api/load_file')
         def __load_file():
             return self.index()
     
     def index(self):
-        return "1"
+        return "Main Server Index Page"
+
+    def upload_file(self):
+        pass
+        
 
     
     def run(self):
