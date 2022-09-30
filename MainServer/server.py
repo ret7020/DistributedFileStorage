@@ -1,5 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from db import DataBase
+from utils import allowed_file
+from config import *
+import requests
+import json
 
 class WebApi:
     def __init__(self, name, host='0.0.0.0', port=8080):
@@ -7,12 +11,14 @@ class WebApi:
         self.host = host
         self.port = port
         self.app.config["TEMPLATES_AUTO_RELOAD"] = True
+        with open("hostings.json") as hosting_list_file:
+            self.hostings_list = json.load(hosting_list_file)
     
         @self.app.route('/')
         def __index():
             return self.index()
 
-        @self.app.route('/api/upload_file', method=['POST'])
+        @self.app.route('/api/upload_file', methods=['POST'])
         def __upload_file():
             return self.upload_file()
 
@@ -24,7 +30,11 @@ class WebApi:
         return "Main Server Index Page"
 
     def upload_file(self):
-        pass
+        for hosting in self.hostings_list:
+            data = requests.get(f"{hosting}/api/server_status").json()
+            if data:
+                print(data)
+
         
 
     
